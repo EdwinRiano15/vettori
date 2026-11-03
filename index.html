@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vettori | Joyería en oro laminado y oro 18K</title>
+  <meta name="description" content="Vettori, joyería de autor en Ibagué. Pulseras en oro laminado, colección exclusiva en oro 18K y combo para emprendedores.">
+
+  <!-- Tipografías: Playfair Display (títulos) + Jost (texto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- =====================================================
+       1. NAVBAR FIJO
+       El menú móvil funciona solo con CSS (checkbox).
+       ===================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#inicio" class="logo" aria-label="Vettori, inicio">VETTORI</a>
+
+      <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">
+      <label for="menu-toggle" class="burger" aria-hidden="true"><span></span></label>
+
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#coleccion">Colección</a>
+        <a href="#oro-18k">Oro 18K</a>
+        <a href="#trabaja-con-nosotros">Trabaja con Nosotros</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+
+      <!-- Botón superior de contacto directo -->
+      <a class="btn btn-line btn-sm header-cta" target="_blank" rel="noopener"
+         href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n">Escríbenos</a>
+    </div>
+  </header>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a class="float-wa" target="_blank" rel="noopener" aria-label="Escribir a Vettori por WhatsApp"
+     href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8.500" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="15.500" cy="12" r="1" fill="currentColor"/></svg>
+  </a>
+
+  <main>
+
+    <!-- =====================================================
+         2. HERO / BIENVENIDA
+         ===================================================== -->
+    <section class="hero" id="inicio">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1>Vettori</h1>
+          <p class="hero-sub">La elegancia del oro que se lleva en la muñeca</p>
+          <a href="#coleccion" class="btn btn-solid">Ver Catálogo</a>
+        </div>
+
+        <!-- Marco en arco para la fotografía principal -->
+        <div class="hero-arch">
+          <div class="media" data-ph="images/hero-vettori.jpg">
+            <img src="images/hero-vettori.jpg" alt="Pulsera Vettori en oro laminado sobre la muñeca" onerror="this.style.display='none'">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         3. CATÁLOGO: ORO LAMINADO
+         ===================================================== -->
+    <section class="section" id="coleccion">
+      <div class="container">
+        <header class="section-head">
+          <h2>Pulseras en Oro Laminado</h2>
+          <p>Dos medidas de balín, un mismo acabado luminoso.</p>
+        </header>
+
+        <div class="grid">
+
+          <!-- Producto 1 -->
+          <article class="card">
+            <div class="media" data-ph="images/oro-laminado-10balines-numero5.png">
+              <div class="slider">
+                <img src="images/oro-laminado-10balines-numero5.png" alt="Pulsera de Oro Laminado con 10 balines número 5" loading="lazy" onerror="this.remove()">
+                <!-- Más fotos: copia la línea <img> de arriba y cambia el nombre del archivo -->
+              </div>
+            </div>
+            <div class="card-body">
+              <h3>Pulsera Oro Laminado</h3>
+              <p class="card-sub">10 balines #5</p>
+              <p class="card-desc">Balines de mayor tamaño para una presencia marcada y un brillo que se nota.</p>
+              <p class="price">$125.000 <span>COP</span></p>
+              <a class="btn btn-solid btn-block" target="_blank" rel="noopener"
+                 href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20estoy%20interesado%2Fa%20en%20adquirir%20la%20Pulsera%20de%20Oro%20Laminado%2010%20balines%20%235%20por%20%24125.000%20COP">Comprar por WhatsApp</a>
+            </div>
+          </article>
+
+          <!-- Producto 2 -->
+          <article class="card">
+            <div class="media" data-ph="images/pulsera-balin-4.jpg">
+              <div class="slider">
+                <img src="images/pulsera-balin-4.jpg" alt="Pulsera de Oro Laminado con 10 balines número 4" loading="lazy" onerror="this.remove()">
+                <!-- Más fotos: copia la línea <img> de arriba y cambia el nombre del archivo -->
+              </div>
+            </div>
+            <div class="card-body">
+              <h3>Pulsera Oro Laminado</h3>
+              <p class="card-sub">10 balines #4</p>
+              <p class="card-desc">Un trazo más fino y delicado, pensado para acompañarte todos los días.</p>
+              <p class="price">$115.000 <span>COP</span></p>
+              <a class="btn btn-solid btn-block" target="_blank" rel="noopener"
+                 href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20estoy%20interesado%2Fa%20en%20adquirir%20la%20Pulsera%20de%20Oro%20Laminado%2010%20balines%20%234%20por%20%24115.000%20COP">Comprar por WhatsApp</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         3b. COLECCIÓN EXCLUSIVA ORO 18K
+         ===================================================== -->
+    <section class="section section-ivory" id="oro-18k">
+      <div class="container gold-split">
+
+        <div class="gold-copy">
+          <h2>Colección Exclusiva Oro 18K</h2>
+          <p>Piezas de alta gama en oro de 18 quilates, elegidas para ocasiones que merecen quedarse en la memoria. Cuéntanos qué buscas y te mostramos los modelos disponibles.</p>
+          <p class="price-note">Modelos y precios bajo consulta</p>
+          <a class="btn btn-line" target="_blank" rel="noopener"
+             href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20Colecci%C3%B3n%20Exclusiva%20Oro%2018K">Solicitar Información</a>
+        </div>
+
+        <!-- Espacio de visualización: una imagen principal y dos modelos -->
+        <div class="gold-gallery">
+          <div class="media media-main" data-ph="images/oro-18k-principal.jpg">
+            <img src="images/oro-18k-principal.jpg" alt="Joya exclusiva en oro 18K" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <div class="media" data-ph="images/oro-18k-2.jpg">
+            <img src="images/oro-18k-2.jpg" alt="Modelo en oro 18K" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <div class="media" data-ph="images/oro-18k-3.jpg">
+            <img src="images/oro-18k-3.jpg" alt="Modelo en oro 18K" loading="lazy" onerror="this.style.display='none'">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         4. TRABAJA CON NOSOTROS: COMBO EMPRENDEDOR
+         ===================================================== -->
+    <section class="section" id="trabaja-con-nosotros">
+      <div class="container">
+        <div class="combo">
+          <div class="media" data-ph="images/combo-emprendedor.jpg">
+              <div class="slider">
+                <img src="images/combo-emprendedor.jpg" alt="Combo Emprendedor con 10 pulseras de diferentes diseños" loading="lazy" onerror="this.remove()">
+                <!-- Más fotos: copia la línea <img> de arriba y cambia el nombre del archivo -->
+              </div>
+            </div>
+
+          <div class="combo-copy">
+            <h2>Trabaja con nosotros</h2>
+            <h3>Combo Emprendedor</h3>
+            <p>Diez pulseras de diferentes diseños para que inicies tu negocio con variedad desde el primer día. Te acompañamos por WhatsApp en tus primeras ventas.</p>
+            <p class="price">$66.000 <span>COP</span></p>
+            <a class="btn btn-solid" target="_blank" rel="noopener"
+               href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20estoy%20interesado%2Fa%20en%20adquirir%20el%20Combo%20Emprendedor%20de%2010%20pulseras%20por%20%2466.000%20COP">Solicitar Información</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================
+       5. HORARIOS, UBICACIÓN Y FOOTER
+       ===================================================== -->
+  <footer class="site-footer" id="contacto">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div>
+          <a href="#inicio" class="logo">VETTORI</a>
+          <p class="footer-tag">La elegancia del oro que se lleva en la muñeca.</p>
+        </div>
+
+        <div>
+          <h4>Horarios de atención</h4>
+          <!-- Ajusta los horarios a los reales de tu negocio -->
+          <p>Lunes a viernes, 9:00 a.m. a 6:00 p.m.<br>Sábados, 9:00 a.m. a 2:00 p.m.</p>
+        </div>
+
+        <div>
+          <h4>Ubicación</h4>
+          <p>Ibagué, Tolima, Colombia<br>Coordina tu entrega o envío por WhatsApp: +57 318 441 0769</p>
+        </div>
+
+        <div>
+          <h4>Redes sociales</h4>
+          <!-- Reemplaza los # por tus perfiles -->
+          <ul class="social">
+            <li><a href="#" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href="#" target="_blank" rel="noopener">Facebook</a></li>
+            <li><a href="#" target="_blank" rel="noopener">TikTok</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <p class="copy">&copy; 2026 Vettori. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Carruseles de fotos y visor ampliado -->
+  <script src="js/main.js" defer></script>
+
+</body>
+</html>
