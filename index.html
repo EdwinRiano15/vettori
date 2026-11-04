@@ -4,73 +4,169 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vettori | Joyería en oro laminado y oro 18K</title>
-  <meta name="description" content="Vettori, joyería de autor en Ibagué. Pulseras en oro laminado, colección exclusiva en oro 18K y combo para emprendedores.">
-
+  <meta name="description" content="Vettori, joyería en Ibagué. Pulseras en oro laminado, colección exclusiva en oro 18K y combo para emprendedores.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="css/styles.css">
+  <noscript><style>.intro{display:none}</style></noscript>
 </head>
 <body>
 
-  <!-- 1. NAVBAR FIJO -->
+  <!-- ============ 0. VIDEO DE INTRODUCCIÓN ============
+       Dos videos: videos/intro.mp4 (computador) y videos/intro-movil.mp4 (celular).
+       Se reproduce al abrir el enlace (una vez por visita).
+       Para probarlo siempre: index.html?intro -->
+  <div class="intro" id="intro" role="dialog" aria-label="Video de introducción">
+    <video id="intro-video" muted playsinline autoplay preload="auto"></video>
+    <div class="intro-ui">
+      <button type="button" id="intro-sound">Activar sonido</button>
+      <button type="button" id="intro-skip">Entrar a la tienda</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var intro = document.getElementById('intro');
+      var v = document.getElementById('intro-video');
+      var SRC_PC = 'videos/intro.mp4';              // video para computador (horizontal)
+      var SRC_MOVIL = 'videos/intro-movil.mp4';    // video para celular (vertical)
+      var esMovil = window.matchMedia('(max-width: 720px), (max-aspect-ratio: 1/1)').matches;
+      var MAX = 0;   // segundos máximos de la intro (0 = el video completo; por ejemplo 8 para cortarla a los 8 s)
+      var seen = false;
+      try { seen = sessionStorage.getItem('vettoriIntro') === '1'; } catch (e) {}
+      if (seen && location.search.indexOf('intro') === -1) { intro.remove(); return; }
+
+      document.body.classList.add('intro-open');
+
+      function done() {
+        if (!intro) return;
+        var box = intro; intro = null;
+        box.classList.add('out');
+        document.body.classList.remove('intro-open');
+        try { sessionStorage.setItem('vettoriIntro', '1'); } catch (e) {}
+        try { v.pause(); } catch (e) {}
+        window.scrollTo(0, 0);                                   // la tienda empieza desde arriba
+        setTimeout(function () { box.remove(); }, 800);
+      }
+
+      // Si algo falla, la intro se omite y deja el motivo en la consola (F12)
+      function skip(why) { try { console.warn('Intro omitida: ' + why); } catch (e) {} done(); }
+      v.addEventListener('ended', done);                                   // termina el video
+      v.addEventListener('timeupdate', function () {                        // seguros por si "ended" no se dispara
+        if (v.duration && v.duration - v.currentTime < 0.3) done();
+        if (MAX && v.currentTime >= MAX) done();
+      });
+      v.addEventListener('loadedmetadata', function () {
+        var secs = (MAX && MAX < v.duration) ? MAX : v.duration;
+        if (secs && isFinite(secs)) setTimeout(done, secs * 1000 + 1500);
+      });
+      var usoRespaldo = false;
+      v.addEventListener('error', function () {
+        if (esMovil && !usoRespaldo) {                                     // si falta el video de celular, usa el de computador
+          usoRespaldo = true; v.classList.add('fit'); v.src = SRC_PC; v.play().catch(function () {});
+          return;
+        }
+        skip('no se encontro el video o su formato no es compatible (codigo ' + (v.error ? v.error.code : '?') + ')');
+      });
+      document.getElementById('intro-skip').addEventListener('click', done);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') done(); });
+
+      var snd = document.getElementById('intro-sound');
+      snd.addEventListener('click', function () { v.muted = false; v.play(); snd.hidden = true; });
+
+      v.src = esMovil ? SRC_MOVIL : SRC_PC;                                // elige el video según el dispositivo
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {                              // autoplay bloqueado: botón para iniciar
+        if (!intro) return;
+        var go = document.createElement('button');
+        go.type = 'button'; go.className = 'intro-play'; go.textContent = 'Ver intro';
+        go.addEventListener('click', function () { go.remove(); v.muted = false; v.play(); snd.hidden = true; });
+        intro.appendChild(go);
+      });
+      setTimeout(function () { if (intro && v.readyState < 2) skip('tardo mas de 10 segundos en cargar'); }, 10000);
+    })();
+  </script>
+
+
+  <!-- ============ 1. BARRA DE AVISO ============ -->
+  <div class="topbar">
+    <p>Asesoría y pedidos directos por WhatsApp</p>
+    <a href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20hablar%20con%20un%20asesor" target="_blank" rel="noopener">Hablar con un asesor</a>
+  </div>
+
+  <!-- ============ 2. NAVBAR ============ -->
   <header class="site-header">
     <div class="container header-inner">
       <a href="#inicio" class="logo" aria-label="Vettori, inicio">VETTORI</a>
-
       <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">
       <label for="menu-toggle" class="burger" aria-hidden="true"><span></span></label>
-
       <nav class="nav" aria-label="Navegación principal">
         <a href="#inicio">Inicio</a>
-        <a href="#coleccion">Colección</a>
+        <a href="#catalogo">Colección</a>
         <a href="#oro-18k">Oro 18K</a>
         <a href="#trabaja-con-nosotros">Trabaja con Nosotros</a>
         <a href="#contacto">Contacto</a>
       </nav>
-
       <a class="btn btn-line btn-sm header-cta" target="_blank" rel="noopener"
          href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n">Escríbenos</a>
     </div>
   </header>
 
-  <!-- Botón flotante de WhatsApp -->
-  <a class="float-wa" target="_blank" rel="noopener" aria-label="Escribir a Vettori por WhatsApp"
-     href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8.5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="15.5" cy="12" r="1" fill="currentColor"/></svg>
-  </a>
-
   <main>
 
-    <!-- 2. HERO -->
-    <section class="hero" id="inicio">
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <h1>Vettori</h1>
-          <p class="hero-sub">La elegancia del oro que se lleva en la muñeca</p>
-          <a href="#coleccion" class="btn btn-solid">Ver Catálogo</a>
-        </div>
-        <div class="hero-arch">
-          <div class="media" data-ph="images/hero-vettori.jpg">
-            <img src="images/hero-vettori.jpg" alt="Pulsera Vettori en oro laminado sobre la muñeca" onerror="this.style.display='none'">
-          </div>
-        </div>
+    <!-- ============ 3. HERO: CARRUSEL DE 3 PORTADAS ============ -->
+    <section class="hero" id="inicio" aria-label="Portadas">
+      <div class="hero-track">
+
+        <article class="slide">
+          <div class="media" data-ph="images/hero-1.jpg"><img src="images/hero-1.jpg" alt="Pulsera Vettori en oro laminado" onerror="this.style.display='none'"></div>
+          <div class="container"><div class="slide-copy">
+            <h1>La elegancia del oro que se lleva en la muñeca</h1>
+            <a href="#catalogo" class="btn btn-solid">Ver Catálogo</a>
+          </div></div>
+        </article>
+
+        <article class="slide">
+          <div class="media" data-ph="images/hero-2.jpg"><img src="images/hero-2.jpg" alt="Pulseras de oro laminado con balines" onerror="this.style.display='none'"></div>
+          <div class="container"><div class="slide-copy">
+            <h2>Pulseras en oro laminado</h2>
+            <p>Balines #5 y #4, desde $115.000 COP.</p>
+            <a href="#catalogo" class="btn btn-solid" data-go="pulseras">Ver pulseras</a>
+          </div></div>
+        </article>
+
+        <article class="slide">
+          <div class="media" data-ph="images/hero-3.jpg"><img src="images/hero-3.jpg" alt="Colección exclusiva en oro 18K" onerror="this.style.display='none'"></div>
+          <div class="container"><div class="slide-copy">
+            <h2>Colección Exclusiva Oro 18K</h2>
+            <p>Piezas de alta gama, modelos disponibles bajo consulta.</p>
+            <a href="#oro-18k" class="btn btn-solid">Conocer la colección</a>
+          </div></div>
+        </article>
+
       </div>
+      <div class="hero-dots" aria-hidden="true"></div>
     </section>
 
-    <!-- 3. CATÁLOGO: ORO LAMINADO -->
-    <section class="section" id="coleccion">
+    <!-- ============ 4. COMPRA TU FAVORITO (filtros + productos) ============ -->
+    <section class="section" id="catalogo">
       <div class="container">
         <header class="section-head">
-          <h2>Pulseras en Oro Laminado</h2>
-          <p>Dos medidas de balín, un mismo acabado luminoso.</p>
+          <h2>Compra tu favorito</h2>
+          <p>Elige una categoría y escríbenos para hacer tu pedido.</p>
         </header>
+
+        <div class="tabs" role="tablist" aria-label="Filtrar productos">
+          <button class="tab" role="tab" aria-selected="true" data-filter="all">Todo</button>
+          <button class="tab" role="tab" aria-selected="false" data-filter="pulseras">Pulseras</button>
+          <button class="tab" role="tab" aria-selected="false" data-filter="oro18k">Oro 18K</button>
+          <button class="tab" role="tab" aria-selected="false" data-filter="emprendedores">Emprendedores</button>
+        </div>
 
         <div class="grid">
 
-          <!-- Producto 1: para más fotos, copia una línea <img> dentro de .slider -->
-          <article class="card">
+          <!-- Producto 1 · Para más fotos, copia una línea <img> dentro de .slider -->
+          <article class="card" data-cat="pulseras">
             <div class="media" data-ph="images/oro-laminado-10balines-numero5.png">
               <div class="slider">
                 <img src="images/oro-laminado-10balines-numero5.png" alt="Pulsera de Oro Laminado con 10 balines número 5" onerror="this.remove()">
@@ -80,7 +176,6 @@
             <div class="card-body">
               <h3>Pulsera Oro Laminado</h3>
               <p class="card-sub">10 balines #5</p>
-              <p class="card-desc">Balines de mayor tamaño para una presencia marcada y un brillo que se nota.</p>
               <p class="price">$125.000 <span>COP</span></p>
               <a class="btn btn-solid btn-block" target="_blank" rel="noopener"
                  href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20estoy%20interesado%2Fa%20en%20adquirir%20la%20Pulsera%20de%20Oro%20Laminado%2010%20balines%20%235%20por%20%24125.000%20COP">Comprar por WhatsApp</a>
@@ -88,7 +183,7 @@
           </article>
 
           <!-- Producto 2 -->
-          <article class="card">
+          <article class="card" data-cat="pulseras">
             <div class="media" data-ph="images/pulsera-balin-4.jpg">
               <div class="slider">
                 <img src="images/pulsera-balin-4.jpg" alt="Pulsera de Oro Laminado con 10 balines número 4" onerror="this.remove()">
@@ -97,10 +192,41 @@
             <div class="card-body">
               <h3>Pulsera Oro Laminado</h3>
               <p class="card-sub">10 balines #4</p>
-              <p class="card-desc">Un trazo más fino y delicado, pensado para acompañarte todos los días.</p>
               <p class="price">$115.000 <span>COP</span></p>
               <a class="btn btn-solid btn-block" target="_blank" rel="noopener"
                  href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20estoy%20interesado%2Fa%20en%20adquirir%20la%20Pulsera%20de%20Oro%20Laminado%2010%20balines%20%234%20por%20%24115.000%20COP">Comprar por WhatsApp</a>
+            </div>
+          </article>
+
+          <!-- Producto 3 · Oro 18K -->
+          <article class="card" data-cat="oro18k">
+            <div class="media" data-ph="images/oro-18k-1.jpg">
+              <div class="slider">
+                <img src="images/oro-18k-1.jpg" alt="Joya exclusiva en oro 18K" onerror="this.remove()">
+              </div>
+            </div>
+            <div class="card-body">
+              <h3>Colección Exclusiva</h3>
+              <p class="card-sub">Oro 18K</p>
+              <p class="price price-note">Precio bajo consulta</p>
+              <a class="btn btn-line btn-block" target="_blank" rel="noopener"
+                 href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20Colecci%C3%B3n%20Exclusiva%20Oro%2018K">Solicitar Información</a>
+            </div>
+          </article>
+
+          <!-- Producto 4 · Combo -->
+          <article class="card" data-cat="emprendedores">
+            <div class="media" data-ph="images/combo-emprendedor.jpg">
+              <div class="slider">
+                <img src="images/combo-emprendedor.jpg" alt="Combo Emprendedor con 10 pulseras de diferentes diseños" onerror="this.remove()">
+              </div>
+            </div>
+            <div class="card-body">
+              <h3>Combo Emprendedor</h3>
+              <p class="card-sub">10 pulseras, diseños diferentes</p>
+              <p class="price">$66.000 <span>COP</span></p>
+              <a class="btn btn-solid btn-block" target="_blank" rel="noopener"
+                 href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20estoy%20interesado%2Fa%20en%20adquirir%20el%20Combo%20Emprendedor%20de%2010%20pulseras%20por%20%2466.000%20COP">Adquirir ahora</a>
             </div>
           </article>
 
@@ -108,54 +234,62 @@
       </div>
     </section>
 
-    <!-- 3b. COLECCIÓN EXCLUSIVA ORO 18K -->
-    <section class="section section-ivory" id="oro-18k">
-      <div class="container gold-split">
-        <div class="gold-copy">
-          <h2>Colección Exclusiva Oro 18K</h2>
-          <p>Piezas de alta gama en oro de 18 quilates, elegidas para ocasiones que merecen quedarse en la memoria. Cuéntanos qué buscas y te mostramos los modelos disponibles.</p>
-          <p class="price-note">Modelos y precios bajo consulta</p>
-          <a class="btn btn-line" target="_blank" rel="noopener"
-             href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20Colecci%C3%B3n%20Exclusiva%20Oro%2018K">Solicitar Información</a>
-        </div>
-        <div class="gold-gallery">
-          <div class="media media-main" data-ph="images/oro-18k-principal.jpg">
-            <img src="images/oro-18k-principal.jpg" alt="Joya exclusiva en oro 18K" onerror="this.style.display='none'">
-          </div>
-          <div class="media" data-ph="images/oro-18k-2.jpg">
-            <img src="images/oro-18k-2.jpg" alt="Modelo en oro 18K" onerror="this.style.display='none'">
-          </div>
-          <div class="media" data-ph="images/oro-18k-3.jpg">
-            <img src="images/oro-18k-3.jpg" alt="Modelo en oro 18K" onerror="this.style.display='none'">
-          </div>
+    <!-- ============ 5. COMPRA POR CATEGORÍA ============ -->
+    <section class="section section-ivory">
+      <div class="container">
+        <header class="section-head"><h2>Compra por categoría</h2></header>
+        <div class="tiles">
+          <a class="tile" href="#catalogo" data-go="pulseras">
+            <div class="media" data-ph="images/oro-laminado-10balines-numero5.png"><img src="images/oro-laminado-10balines-numero5.png" alt="" onerror="this.style.display='none'"></div>
+            <span class="tile-label"><strong>Pulseras</strong><small>Oro laminado, desde $115.000 COP</small></span>
+          </a>
+          <a class="tile" href="#catalogo" data-go="oro18k">
+            <div class="media" data-ph="images/oro-18k-1.jpg"><img src="images/oro-18k-1.jpg" alt="" onerror="this.style.display='none'"></div>
+            <span class="tile-label"><strong>Oro 18K</strong><small>Colección exclusiva</small></span>
+          </a>
+          <a class="tile" href="#catalogo" data-go="emprendedores">
+            <div class="media" data-ph="images/combo-emprendedor.jpg"><img src="images/combo-emprendedor.jpg" alt="" onerror="this.style.display='none'"></div>
+            <span class="tile-label"><strong>Emprendedores</strong><small>Combo desde $66.000 COP</small></span>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- 4. COMBO EMPRENDEDOR -->
-    <section class="section" id="trabaja-con-nosotros">
-      <div class="container">
-        <div class="combo">
-          <div class="media" data-ph="images/combo-emprendedor.jpg">
-            <div class="slider">
-              <img src="images/combo-emprendedor.jpg" alt="Combo Emprendedor con 10 pulseras de diferentes diseños" onerror="this.remove()">
-            </div>
-          </div>
-          <div class="combo-copy">
-            <h2>Trabaja con nosotros</h2>
-            <h3>Combo Emprendedor</h3>
-            <p>Diez pulseras de diferentes diseños para que inicies tu negocio con variedad desde el primer día. Te acompañamos por WhatsApp en tus primeras ventas.</p>
-            <p class="price">$66.000 <span>COP</span></p>
-            <a class="btn btn-solid" target="_blank" rel="noopener"
-               href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20estoy%20interesado%2Fa%20en%20adquirir%20el%20Combo%20Emprendedor%20de%2010%20pulseras%20por%20%2466.000%20COP">Solicitar Información</a>
-          </div>
-        </div>
+    <!-- ============ 6. BANNER ORO 18K ============ -->
+    <section class="banner" id="oro-18k">
+      <div class="media" data-ph="images/oro-18k-banner.jpg"><img src="images/oro-18k-banner.jpg" alt="Colección exclusiva en oro 18K" onerror="this.style.display='none'"></div>
+      <div class="container"><div class="banner-copy">
+        <h2>Colección Exclusiva Oro 18K</h2>
+        <p>Piezas de alta gama en oro de 18 quilates, para ocasiones que merecen quedarse en la memoria. Cuéntanos qué buscas y te mostramos los modelos disponibles.</p>
+        <a class="btn btn-solid" target="_blank" rel="noopener"
+           href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20Colecci%C3%B3n%20Exclusiva%20Oro%2018K">Solicitar Información</a>
+      </div></div>
+    </section>
+
+    <!-- ============ 7. FRANJA DE CONFIANZA (edita los textos a tu negocio) ============ -->
+    <section class="trust">
+      <div class="container trust-grid">
+        <div><h3>Asesoría personalizada</h3><p>Te acompañamos por WhatsApp antes y después de tu compra.</p></div>
+        <div><h3>Pedido directo</h3><p>Escríbenos y confirma tu joya por chat, sin pasos de más.</p></div>
+        <div><h3>Entrega coordinada</h3><p>Acordamos contigo el envío o la entrega en Ibagué.</p></div>
+        <div><h3>Para emprendedores</h3><p>Un combo con 10 diseños para iniciar tu negocio.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ 8. TRABAJA CON NOSOTROS ============ -->
+    <section class="section combo-band" id="trabaja-con-nosotros">
+      <div class="container combo-inner">
+        <h2>Trabaja con nosotros</h2>
+        <p>Revende joyería que ya gusta. El Combo Emprendedor incluye 10 pulseras de diferentes diseños para que empieces con variedad desde el primer día.</p>
+        <p class="price">$66.000 <span>COP</span></p>
+        <a class="btn btn-solid" target="_blank" rel="noopener"
+           href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20estoy%20interesado%2Fa%20en%20adquirir%20el%20Combo%20Emprendedor%20de%2010%20pulseras%20por%20%2466.000%20COP">Solicitar Información</a>
       </div>
     </section>
 
   </main>
 
-  <!-- 5. FOOTER -->
+  <!-- ============ 9. FOOTER ============ -->
   <footer class="site-footer" id="contacto">
     <div class="container">
       <div class="footer-grid">
@@ -164,16 +298,23 @@
           <p class="footer-tag">La elegancia del oro que se lleva en la muñeca.</p>
         </div>
         <div>
-          <h4>Horarios de atención</h4>
-          <p>Lunes a viernes, 9:00 a.m. a 6:00 p.m.<br>Sábados, 9:00 a.m. a 2:00 p.m.</p>
-        </div>
-        <div>
-          <h4>Ubicación</h4>
-          <p>Ibagué, Tolima, Colombia<br>Coordina tu entrega o envío por WhatsApp: +57 318 441 0769</p>
-        </div>
-        <div>
-          <h4>Redes sociales</h4>
+          <h4>Explora</h4>
           <ul class="social">
+            <li><a href="#catalogo">Colección</a></li>
+            <li><a href="#oro-18k">Oro 18K</a></li>
+            <li><a href="#trabaja-con-nosotros">Trabaja con nosotros</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Horarios y ubicación</h4>
+          <!-- Ajusta los horarios a los reales -->
+          <p>Lunes a viernes, 9:00 a.m. a 6:00 p.m.<br>Sábados, 9:00 a.m. a 2:00 p.m.<br>Ibagué, Tolima, Colombia</p>
+        </div>
+        <div>
+          <h4>Contacto y redes</h4>
+          <ul class="social">
+            <li><a href="https://api.whatsapp.com/send?phone=573184410769" target="_blank" rel="noopener">WhatsApp +57 318 441 0769</a></li>
+            <!-- Reemplaza los # por tus perfiles -->
             <li><a href="#" target="_blank" rel="noopener">Instagram</a></li>
             <li><a href="#" target="_blank" rel="noopener">Facebook</a></li>
             <li><a href="#" target="_blank" rel="noopener">TikTok</a></li>
@@ -184,77 +325,83 @@
     </div>
   </footer>
 
-  <!-- JAVASCRIPT: flechas del carrusel + visor ampliado (todo en este archivo) -->
-  <script>
-    console.log('Vettori JS listo');
+  <!-- Botón flotante -->
+  <a class="float-wa" target="_blank" rel="noopener" aria-label="Escribir a Vettori por WhatsApp"
+     href="https://api.whatsapp.com/send?phone=573184410769&text=Hola%20Vettori%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8.5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="15.5" cy="12" r="1" fill="currentColor"/></svg>
+    <span>¿En qué te ayudamos?</span>
+  </a>
 
-    /* Flechas en los carruseles con más de una foto */
-    window.addEventListener('load', function () {
-      document.querySelectorAll('.slider').forEach(function (slider) {
+  <!-- ============ JAVASCRIPT (todo en este archivo) ============ -->
+  <script>
+  (function () {
+    /* ---- Carrusel principal (hero) ---- */
+    var track = document.querySelector('.hero-track');
+    var slides = track.children, dotsBox = document.querySelector('.hero-dots');
+    var current = 0, timer;
+    for (var d = 0; d < slides.length; d++) dotsBox.appendChild(document.createElement('span'));
+    var dots = dotsBox.children;
+    function goTo(n) { current = (n + slides.length) % slides.length; track.scrollTo({ left: current * track.clientWidth, behavior: 'smooth' }); }
+    function mark() {
+      var n = Math.round(track.scrollLeft / track.clientWidth);
+      for (var k = 0; k < dots.length; k++) dots[k].classList.toggle('on', k === n);
+      current = n;
+    }
+    track.addEventListener('scroll', mark); mark();
+    function play() { timer = setInterval(function () { goTo(current + 1); }, 6000); }
+    function stop() { clearInterval(timer); }
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      play();
+      ['mouseenter', 'touchstart', 'focusin'].forEach(function (ev) { track.addEventListener(ev, stop, { passive: true }); });
+    }
+
+    /* ---- Filtros del catálogo ---- */
+    var tabs = document.querySelectorAll('.tab'), cards = document.querySelectorAll('.card');
+    function filter(cat) {
+      tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.filter === cat ? 'true' : 'false'); });
+      cards.forEach(function (c) { c.hidden = !(cat === 'all' || c.dataset.cat === cat); });
+    }
+    tabs.forEach(function (t) { t.addEventListener('click', function () { filter(t.dataset.filter); }); });
+    document.querySelectorAll('[data-go]').forEach(function (a) { a.addEventListener('click', function () { filter(a.dataset.go); }); });
+
+    /* ---- Flechas en carruseles de producto con más de una foto ---- */
+    document.querySelectorAll('.slider').forEach(function (slider) {
+      window.addEventListener('load', function () {
         if (slider.children.length < 2) return;
         ['prev', 'next'].forEach(function (dir) {
           var b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'arrow arrow-' + dir;
+          b.type = 'button'; b.className = 'arrow arrow-' + dir;
           b.setAttribute('aria-label', dir === 'prev' ? 'Foto anterior' : 'Foto siguiente');
           b.textContent = dir === 'prev' ? '\u2039' : '\u203A';
-          b.addEventListener('click', function () {
-            slider.scrollBy({ left: (dir === 'prev' ? -1 : 1) * slider.clientWidth, behavior: 'smooth' });
-          });
+          b.addEventListener('click', function () { slider.scrollBy({ left: (dir === 'prev' ? -1 : 1) * slider.clientWidth, behavior: 'smooth' }); });
           slider.parentElement.appendChild(b);
         });
       });
     });
 
-    /* Visor ampliado: clic en una foto para verla en grande */
-    (function () {
-      var box = document.createElement('div');
-      box.className = 'lightbox';
-      box.hidden = true;
-      box.innerHTML =
-        '<button type="button" class="lb-close" aria-label="Cerrar">&times;</button>' +
-        '<button type="button" class="lb-nav lb-prev" aria-label="Foto anterior">&#8249;</button>' +
-        '<img alt="">' +
-        '<button type="button" class="lb-nav lb-next" aria-label="Foto siguiente">&#8250;</button>';
-      document.body.appendChild(box);
-
-      var big = box.querySelector('img');
-      var photos = [];
-      var i = 0;
-
-      function show(n) {
-        i = (n + photos.length) % photos.length;
-        big.src = photos[i].currentSrc || photos[i].src;
-        big.alt = photos[i].alt;
-        box.classList.toggle('single', photos.length < 2);
-      }
-      function close() {
-        box.hidden = true;
-        document.body.classList.remove('lb-open');
-      }
-
-      document.addEventListener('click', function (e) {
-        var img = e.target.closest('.slider img');
-        if (img) {
-          photos = Array.prototype.slice.call(img.parentElement.querySelectorAll('img'));
-          show(photos.indexOf(img));
-          box.hidden = false;
-          document.body.classList.add('lb-open');
-          return;
-        }
-        if (box.hidden) return;
-        if (e.target.closest('.lb-prev')) show(i - 1);
-        else if (e.target.closest('.lb-next')) show(i + 1);
-        else if (e.target !== big) close();
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (box.hidden) return;
-        if (e.key === 'Escape') close();
-        if (e.key === 'ArrowLeft') show(i - 1);
-        if (e.key === 'ArrowRight') show(i + 1);
-      });
-    })();
+    /* ---- Visor ampliado ---- */
+    var box = document.createElement('div');
+    box.className = 'lightbox'; box.hidden = true;
+    box.innerHTML = '<button type="button" class="lb-close" aria-label="Cerrar">&times;</button><button type="button" class="lb-nav lb-prev" aria-label="Foto anterior">&#8249;</button><img alt=""><button type="button" class="lb-nav lb-next" aria-label="Foto siguiente">&#8250;</button>';
+    document.body.appendChild(box);
+    var big = box.querySelector('img'), photos = [], i = 0;
+    function show(n) { i = (n + photos.length) % photos.length; big.src = photos[i].currentSrc || photos[i].src; big.alt = photos[i].alt; box.classList.toggle('single', photos.length < 2); }
+    function close() { box.hidden = true; document.body.classList.remove('lb-open'); }
+    document.addEventListener('click', function (e) {
+      var img = e.target.closest('.slider img');
+      if (img) { photos = Array.prototype.slice.call(img.parentElement.querySelectorAll('img')); show(photos.indexOf(img)); box.hidden = false; document.body.classList.add('lb-open'); return; }
+      if (box.hidden) return;
+      if (e.target.closest('.lb-prev')) show(i - 1);
+      else if (e.target.closest('.lb-next')) show(i + 1);
+      else if (e.target !== big) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (box.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(i - 1);
+      if (e.key === 'ArrowRight') show(i + 1);
+    });
+  })();
   </script>
 
 </body>
